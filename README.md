@@ -10,6 +10,7 @@ The original implementation of KAN is [`pykan`](https://github.com/KindXiaoming/
 
 ## Installation
 ```bash
+pip install .
 pip install -r requirements.txt
 ```
 
