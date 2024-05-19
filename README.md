@@ -23,4 +23,10 @@ python examples/train_mnist.py
 
 ## Benchmark
 
-Preliminary benchmarks show that this implementation takes about 1 minute to train on 11th Gen Intel Core i5-1135G7 (my laptop).
+More experiments in the future.
+
+| Architecture    | Wall time (sec)|
+| -------- | ------- |
+| CPU (i5-1135G7)  | 300.11   |
+| CPU (i9-12900K) | 187.22     |
+| GPU (RTX 3070 Ti)    | 46.85    |
