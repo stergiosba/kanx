@@ -30,3 +30,9 @@ More experiments in the future.
 | CPU (i5-1135G7)  | 300.11   |
 | CPU (i9-12900K) | 187.22     |
 | GPU (RTX 3070 Ti)    | 46.85    |
+
+Plots from the GPU experiment:
+
+
+<img width="800" alt="mlp_kan_compare" src="examples/accuracy.png">
+<img width="800" alt="mlp_kan_compare" src="examples/loss.png">

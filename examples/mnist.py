@@ -16,7 +16,7 @@ from typing import List
 # Hyperparameters
 BATCH_SIZE = 64
 LEARNING_RATE = 3e-3
-STEPS = 100
+STEPS = 3000
 PRINT_EVERY = 50
 SEED = 5678
 
@@ -79,15 +79,6 @@ trainloader = torch.utils.data.DataLoader(
 testloader = torch.utils.data.DataLoader(
     test_dataset, batch_size=BATCH_SIZE, shuffle=True
 )
-
-dummy_x, dummy_y = next(iter(trainloader))
-dummy_x = dummy_x.numpy()
-dummy_y = dummy_y.numpy()
-
-key = jax.random.PRNGKey(0)
-in_features = 28 * 28
-out_features = 10
-model = KAN_classifier(layers_hidden=[in_features, 64, out_features], key=key)
 
 
 def loss(
@@ -174,6 +165,7 @@ def train(
     def infinite_trainloader():
         while True:
             yield from trainloader
+
     test_accuracy_report = []
     test_loss_report = []
     for step, (x, y) in zip(range(steps), infinite_trainloader()):
@@ -195,15 +187,46 @@ def train(
 
 
 key = jax.random.PRNGKey(SEED)
+in_features = 28 * 28
+out_features = 10
+model = KAN_classifier(layers_hidden=[in_features, 64, out_features], key=key)
 
 s = time.time()
-model, test_accuracy_report, test_loss_report = train(model, trainloader, testloader, optim, STEPS, PRINT_EVERY)
+model, test_accuracy_report, test_loss_report = train(
+    model, trainloader, testloader, optim, STEPS, PRINT_EVERY
+)
 print(f"Time to train: {time.time()-s}")
 
 fig = go.Figure()
-fig.add_trace(go.Scatter(x=np.arange(len(test_accuracy_report)), y=test_accuracy_report, mode='lines', name='lines'))
+fig.add_trace(
+    go.Scatter(
+        x=np.arange(len(test_accuracy_report)),
+        y=test_accuracy_report,
+        mode="lines",
+        name="lines",
+    )
+)
+fig.update_layout(
+    xaxis_title=r"$\text{Steps}$",
+    yaxis_title=r"$\text{Accuracy}$",
+    showlegend=False,
+    yaxis=dict(showgrid=True),
+)
 fig.show()
 
 fig = go.Figure()
-fig.add_trace(go.Scatter(x=np.arange(len(test_loss_report)), y=test_loss_report, mode='lines', name='lines'))
+fig.add_trace(
+    go.Scatter(
+        x=np.arange(len(test_loss_report)),
+        y=test_loss_report,
+        mode="lines",
+        name="lines",
+    )
+)
+fig.update_layout(
+    xaxis_title=r"$\text{Steps}$",
+    yaxis_title=r"$\text{Loss}$",
+    showlegend=False,
+    yaxis=dict(showgrid=True),
+)
 fig.show()
