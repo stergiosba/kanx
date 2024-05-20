@@ -23,7 +23,7 @@ SEED = 5678
 
 class KAN_classifier(eqx.Module):
     kan: KAN
-
+    embedding: eqx.nn.Linear
     def __init__(
         self,
         layers_hidden: List[int],
@@ -37,6 +37,8 @@ class KAN_classifier(eqx.Module):
         key,
     ) -> None:
         super().__init__()
+        key_kan, key_emb = jax.random.split(key, 2)
+        self.embedding = eqx.nn.Linear(28 * 28, 256, key=key_emb)
         self.kan = KAN(
             layers_hidden=layers_hidden,
             grid_min=grid_min,
@@ -45,10 +47,11 @@ class KAN_classifier(eqx.Module):
             use_base_update=use_base_update,
             base_activation=base_activation,
             spline_weight_init_scale=spline_weight_init_scale,
-            key=key,
+            key=key_kan,
         )
 
     def __call__(self, x):
+        x = self.embedding(x)
         x = self.kan(x)
         x = jax.nn.log_softmax(x)
         return x
@@ -187,7 +190,7 @@ def train(
 
 
 key = jax.random.PRNGKey(SEED)
-in_features = 28 * 28
+in_features = 256
 out_features = 10
 model = KAN_classifier(layers_hidden=[in_features, 64, out_features], key=key)
 

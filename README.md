@@ -24,16 +24,18 @@ python examples/train_mnist.py
 
 ## Benchmark
 
-More experiments in the future.
+We tested the implementation on MNIST and report the following wall-time for 3000 epochs:
 
 | Architecture    | Wall time (sec)|
 | -------- | ------- |
-| CPU (i5-1135G7)  | 300.11   |
-| CPU (i9-12900K) | 187.22     |
-| GPU (RTX 3070 Ti)    | 46.85    |
+| CPU (i5-1135G7)  | 130.51   |
+| CPU (i9-12900K) | 67.85     |
+| GPU (RTX 3070 Ti)    | 13.55    |
 
 Plots from the GPU experiment:
 
 
 <img width="800" alt="mlp_kan_compare" src="examples/accuracy.png">
 <img width="800" alt="mlp_kan_compare" src="examples/loss.png">
+
+More experiments to come...
